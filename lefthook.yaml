@@ -1,0 +1,20 @@
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob: "*.{js,jsx,ts,tsx,json}"
+      run: npx prettier --write {staged_files}
+    lint:
+      glob: "*.{js,jsx,ts,tsx}"
+      run: npx eslint {staged_files}
+    stylelint:
+      glob: "*.{css,scss}"
+      run: npx stylelint {staged_files}
+    check-types:
+      glob: "*.{ts,tsx}"
+      run: npx tsc --noEmit
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit {1}
