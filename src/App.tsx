@@ -1,7 +1,9 @@
 import Logo from "@/assets/logo.png"
 import router from "@/router"
+import "@/styles/antd.scss"
 import { Helmet } from "react-helmet-async"
 import { RouterProvider } from "react-router"
+import { Toaster } from "sonner"
 
 import "./App.css"
 
@@ -16,6 +18,7 @@ function App() {
         />
       </Helmet>
 
+      <Toaster />
       <RouterProvider router={router} />
     </>
   )

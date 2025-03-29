@@ -1,4 +1,7 @@
 // react
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ConfigProvider } from "antd"
+import zhCN from "antd/locale/zh_CN"
 import { Suspense } from "react"
 import ReactDOM from "react-dom/client"
 // helmet
@@ -11,8 +14,15 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 
 root.render(
   <HelmetProvider>
-    <Suspense>
-      <App />
-    </Suspense>
+    <QueryClientProvider client={new QueryClient()}>
+      <Suspense>
+        <ConfigProvider
+          theme={{ token: { colorPrimary: "#00A76F" } }}
+          locale={zhCN}
+        >
+          <App />
+        </ConfigProvider>
+      </Suspense>
+    </QueryClientProvider>
   </HelmetProvider>,
 )
