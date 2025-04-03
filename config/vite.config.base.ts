@@ -32,13 +32,13 @@ export default defineConfig({
   },
   preview: {
     host: true,
-    port: 4173,
+    port: 4174,
     strictPort: true,
     open: true,
   },
   server: {
     host: true,
-    port: 5173,
+    port: 5174,
     strictPort: true,
     open: true,
     cors: true,

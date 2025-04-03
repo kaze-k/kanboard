@@ -1,5 +1,5 @@
 import Logo from "@/assets/logo.png"
-import { MessageOutlined, PieChartOutlined, ProjectOutlined, UserOutlined } from "@ant-design/icons"
+import { CodeOutlined, ProjectOutlined, UserOutlined } from "@ant-design/icons"
 import { Layout, Menu } from "antd"
 import type { MenuProps } from "antd"
 import { useNavigate } from "react-router"
@@ -18,10 +18,9 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 }
 
 const menuItems: MenuItem[] = [
-  getItem("数据概览", "/", <PieChartOutlined />),
-  getItem("用户管理", "/users", <UserOutlined />),
-  getItem("项目管理", "/projects", <ProjectOutlined />),
-  getItem("消息管理", "/messages", <MessageOutlined />),
+  getItem("看板", "/", <CodeOutlined />),
+  getItem("项目概览", "/project", <ProjectOutlined />),
+  getItem("我的", "/me", <UserOutlined />),
 ]
 
 function MainNav() {

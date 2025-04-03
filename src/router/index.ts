@@ -1,13 +1,11 @@
-import { getProject } from "@/api/services/projects"
 import { getUser } from "@/api/services/users"
-import UsersTable from "@/components/usersTable"
 import Main from "@/layouts"
-import Dashboard from "@/pages/dashboard"
+import Kanboard from "@/pages/kanboard"
 import Login from "@/pages/login"
-import Messages from "@/pages/messages"
+import Me from "@/pages/me"
 import Page404 from "@/pages/page404"
-import ProjectInfo from "@/pages/projectInfo"
-import Projects from "@/pages/projects"
+import Project from "@/pages/project"
+import TaskInfo from "@/pages/taskInfo"
 import UserInfo from "@/pages/userInfo"
 import useUserStore from "@/stores/userStore"
 import { LoaderFunctionArgs, createBrowserRouter, redirect } from "react-router"
@@ -16,18 +14,22 @@ const children = [
   {
     index: true,
     path: "/",
-    Component: Dashboard,
+    Component: Kanboard,
   },
   {
-    path: "/users",
+    path: "/project",
+    Component: Project,
+  },
+  {
+    path: "/me",
+    Component: Me,
+  },
+  {
+    path: "/user",
     children: [
       {
         index: true,
-        path: "/users/",
-        Component: UsersTable,
-      },
-      {
-        path: "/users/:id",
+        path: "/user/:id",
         Component: UserInfo,
         loader: async ({ params }: LoaderFunctionArgs) => {
           const { id } = params
@@ -42,31 +44,14 @@ const children = [
     ],
   },
   {
-    path: "/projects",
+    path: "/tasks",
     children: [
       {
         index: true,
-        path: "/projects/",
-        Component: Projects,
-      },
-      {
-        path: "/projects/:id",
-        Component: ProjectInfo,
-        loader: async ({ params }: LoaderFunctionArgs) => {
-          const { id } = params
-          const res = await getProject(Number(id))
-          if (!res) {
-            throw redirect("/404")
-          }
-
-          return res
-        },
+        path: "/tasks/:id",
+        Component: TaskInfo,
       },
     ],
-  },
-  {
-    path: "/messages",
-    Component: Messages,
   },
 ]
 

@@ -17,7 +17,7 @@ root.render(
     <QueryClientProvider client={new QueryClient()}>
       <Suspense>
         <ConfigProvider
-          theme={{ token: { colorPrimary: "#00A76F" } }}
+          theme={{ token: { colorPrimary: "#48EEFF" } }}
           locale={zhCN}
         >
           <App />

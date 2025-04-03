@@ -22,7 +22,7 @@ function Login() {
     >
       <Background />
       <div style={{ fontSize: "20px", fontWeight: 700, backgroundColor: colorBgContainer, paddingBottom: "20px" }}>
-        Kanboard Admin
+        Kanboard
       </div>
       <LoginForm />
     </Layout>
