@@ -1,25 +1,24 @@
+import Logo from "@/assets/logo.png"
 import AccountDropdown from "@/components/AccountDropdown"
 import FullscreenButton from "@/components/FullscreenButton"
-import { MessageOutlined, PieChartOutlined, ProjectOutlined, UserOutlined } from "@ant-design/icons"
+import { HomeOutlined, ProjectOutlined, UserOutlined } from "@ant-design/icons"
 import { Breadcrumb, Layout, theme } from "antd"
 import { BreadcrumbItemType } from "antd/es/breadcrumb/Breadcrumb"
-import { useMatches } from "react-router"
+import { NavLink, useMatches } from "react-router"
 
 const { Header } = Layout
 
 const items: Record<string, string> = {
-  "/": "分析台",
-  "/users": "用户管理",
-  "/projects": "项目管理",
-  "/messages": "消息管理",
+  "/": "看板",
+  "/project": "项目",
+  "/me": "我的",
 }
 
 function getTitle(pathname: string, item: string) {
   const iconMap: Record<string, React.ReactNode> = {
-    "/": <PieChartOutlined />,
-    "/users": <UserOutlined />,
-    "/projects": <ProjectOutlined />,
-    "/messages": <MessageOutlined />,
+    "/": <HomeOutlined />,
+    "/project": <ProjectOutlined />,
+    "/me": <UserOutlined />,
   }
 
   return (
@@ -76,6 +75,26 @@ function MainHeader() {
         width: "100%",
       }}
     >
+      <NavLink
+        style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        to="/"
+      >
+        <img
+          src={Logo}
+          alt="logo"
+          style={{ width: 32, height: 32 }}
+        />
+        <h1
+          style={{
+            marginLeft: 8,
+            fontWeight: 700,
+            fontSize: 18,
+            color: "#48EEFF",
+          }}
+        >
+          Kanboard
+        </h1>
+      </NavLink>
       <Breadcrumb items={breadcrumbItems()} />
       <div style={{ display: "flex", alignItems: "center" }}>
         <FullscreenButton />

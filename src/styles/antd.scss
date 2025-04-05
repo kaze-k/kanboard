@@ -9,3 +9,18 @@
 .ant-menu {
   border-inline-end: none !important;
 }
+
+aside {
+  min-width: 60px !important;
+  max-width: 60px !important;
+  width: 60px !important;
+}
+
+.ant-layout-sider-children {
+  width: 100% !important;
+}
+
+.ant-menu-item,
+.ant-menu-item-selected {
+  border-radius: 10px !important;
+}

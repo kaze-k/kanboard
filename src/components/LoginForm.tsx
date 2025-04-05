@@ -1,10 +1,10 @@
 import { LoginRequest } from "#/api"
 import { captcha } from "@/api/services/users"
 import { useLogin } from "@/stores/userStore"
-import { EyeInvisibleOutlined, UserOutlined } from "@ant-design/icons"
+import { EyeOutlined, UserOutlined } from "@ant-design/icons"
 import { useQuery } from "@tanstack/react-query"
 import { Button, Card, Col, Form, Input, Row } from "antd"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 function LoginForm() {
   const [loading, setLoading] = useState(false)
@@ -17,6 +17,11 @@ function LoginForm() {
     queryFn: captcha,
     refetchOnWindowFocus: false,
   })
+
+  useEffect(() => {
+    if (isRegister) form.resetFields()
+  }, [isRegister])
+
   const handleLogin = async ({ username, password, captchaAnswer }: LoginRequest) => {
     setLoading(true)
     try {
@@ -35,6 +40,8 @@ function LoginForm() {
       form.setFieldValue("captchaAnswer", "")
     }
   }
+
+  const handleRegister = () => {}
 
   return (
     <Card
@@ -59,6 +66,7 @@ function LoginForm() {
             rules={[{ required: true, message: "请输入用户名" }]}
           >
             <Input
+              allowClear
               size="large"
               placeholder={"用户名"}
               prefix={<UserOutlined />}
@@ -69,10 +77,11 @@ function LoginForm() {
             rules={[{ required: true, message: "请输入密码" }]}
           >
             <Input.Password
+              allowClear
               size="large"
               type="password"
               placeholder={"密码"}
-              prefix={<EyeInvisibleOutlined />}
+              prefix={<EyeOutlined />}
             />
           </Form.Item>
           <Form.Item
@@ -82,6 +91,7 @@ function LoginForm() {
             <Row align="middle">
               <Col span={12}>
                 <Input
+                  allowClear
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
                   size="large"
@@ -118,7 +128,7 @@ function LoginForm() {
         <Form
           name="register"
           size="large"
-          onFinish={handleLogin}
+          onFinish={handleRegister}
           form={form}
         >
           <Form.Item
@@ -126,6 +136,7 @@ function LoginForm() {
             rules={[{ required: true, message: "请输入用户名" }]}
           >
             <Input
+              allowClear
               size="large"
               placeholder={"请输入用户名"}
               prefix={<UserOutlined />}
@@ -136,18 +147,44 @@ function LoginForm() {
             rules={[{ required: true, message: "请输入密码" }]}
           >
             <Input.Password
+              allowClear
               size="large"
               type="password"
               placeholder={"请输入密码"}
-              prefix={<EyeInvisibleOutlined />}
+              prefix={<EyeOutlined />}
             />
           </Form.Item>
-          <Form.Item rules={[{ required: true, message: "请再次请输入密码" }]}>
+          <Form.Item
+            name="rePassword"
+            rules={[
+              {
+                required: true,
+                message: "请再次输入密码",
+                validator: (_, value) => {
+                  if (value === undefined) {
+                    return Promise.reject("请再次输入密码")
+                  }
+                  return Promise.resolve()
+                },
+              },
+              {
+                required: true,
+                message: "两次输入的密码不一致",
+                validator: (_, value) => {
+                  if (value !== undefined && value !== form.getFieldValue("password")) {
+                    return Promise.reject("两次输入的密码不一致")
+                  }
+                  return Promise.resolve()
+                },
+              },
+            ]}
+          >
             <Input.Password
+              allowClear
               size="large"
               type="password"
               placeholder={"请再次输入密码"}
-              prefix={<EyeInvisibleOutlined />}
+              prefix={<EyeOutlined />}
             />
           </Form.Item>
           <Form.Item
@@ -157,6 +194,7 @@ function LoginForm() {
             <Row align="middle">
               <Col span={12}>
                 <Input
+                  allowClear
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
                   size="large"
