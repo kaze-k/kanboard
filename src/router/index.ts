@@ -1,4 +1,5 @@
 import { getUser } from "@/api/services/users"
+import { KanbanBoard } from "@/components/kanboard"
 import Main from "@/layouts"
 import Login from "@/pages/login"
 import Me from "@/pages/me"
@@ -13,7 +14,7 @@ const children = [
   {
     index: true,
     path: "/",
-    Component: Me,
+    Component: KanbanBoard,
   },
   {
     path: "/project",

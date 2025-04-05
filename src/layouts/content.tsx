@@ -5,7 +5,7 @@ const { Content } = Layout
 
 function MainContent() {
   return (
-    <Content style={{ padding: 16, flex: 1, overflow: "auto", margin: "0 50px" }}>
+    <Content style={{ padding: "16px 0", flex: 1, overflow: "auto" }}>
       <Outlet />
     </Content>
   )

@@ -39,6 +39,7 @@ function MainNav() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        zIndex: 999,
       }}
       theme="light"
       collapsed={true}
