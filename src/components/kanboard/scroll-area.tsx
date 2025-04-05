@@ -1,5 +1,5 @@
-import * as React from "react"
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"
+import * as React from "react"
 
 type StyleWithOptionalClass = React.CSSProperties & {
   className?: string
@@ -47,21 +47,21 @@ const ScrollBar = React.forwardRef<
   const verticalStyle: React.CSSProperties =
     orientation === "vertical"
       ? {
-        height: "100%",
-        width: "10px", // ≈ w-2.5
-        borderLeft: "1px solid transparent",
-        padding: "1px",
-      }
+          height: "100%",
+          width: "10px", // ≈ w-2.5
+          borderLeft: "1px solid transparent",
+          padding: "1px",
+        }
       : {}
 
   const horizontalStyle: React.CSSProperties =
     orientation === "horizontal"
       ? {
-        height: "10px",
-        flexDirection: "column",
-        borderTop: "1px solid transparent",
-        padding: "1px",
-      }
+          height: "10px",
+          flexDirection: "column",
+          borderTop: "1px solid transparent",
+          padding: "1px",
+        }
       : {}
 
   return (
@@ -90,4 +90,3 @@ const ScrollBar = React.forwardRef<
 ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName
 
 export { ScrollArea, ScrollBar }
-
