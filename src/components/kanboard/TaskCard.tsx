@@ -1,19 +1,29 @@
-import { BarsOutlined } from "@ant-design/icons"
+import { resourcePath } from "@/utils"
+import { BarsOutlined, UserOutlined } from "@ant-design/icons"
 import type { UniqueIdentifier } from "@dnd-kit/core"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { Button, Tag, Typography } from "antd"
+import { Avatar, Button, Card, Tag, Tooltip, Typography } from "antd"
+import { useNavigate } from "react-router"
 
 import type { ColumnId } from "./index"
 
 const { Text } = Typography
+
+interface Member {
+  avatar: string
+  user_id: number
+  username: string
+}
 
 export interface Task {
   id: UniqueIdentifier
   status: ColumnId
   title: string
   desc: string
-  proiority: number
+  priority: number
+  members: Member[]
+  creator: Member
 }
 
 interface TaskCardProps {
@@ -29,6 +39,8 @@ export interface TaskDragData {
 }
 
 export function TaskCard({ task, isOverlay }: TaskCardProps) {
+  const navigate = useNavigate()
+
   const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
     id: task.id,
     data: {
@@ -62,10 +74,13 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
   }
 
   const contentStyle: React.CSSProperties = {
-    padding: "12px",
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
     whiteSpace: "pre-wrap",
     textAlign: "left",
     backgroundColor: "#fff",
+    marginBottom: 8,
   }
 
   return (
@@ -90,12 +105,58 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
         <Tag
           bordered={true}
           style={{ marginLeft: "auto", fontWeight: 500 }}
-          color={task.proiority === 0 ? "blue" : task.proiority === 1 ? "red" : "green"}
+          color={task.priority === 0 ? "blue" : task.priority === 1 ? "red" : "green"}
         >
-          {task.proiority === 0 ? "普通" : task.proiority === 1 ? "高" : "低"}
+          {task.priority === 0 ? "普通" : task.priority === 1 ? "高" : "低"}
         </Tag>
       </div>
-      <div style={contentStyle}>{task.desc}</div>
+      <Card
+        style={{ backgroundColor: "#fff", cursor: "pointer" }}
+        onClick={() => {
+          const id = (task.id as string).split("-")[1]
+          navigate(`/task/${id}`)
+        }}
+      >
+        <div style={contentStyle}>
+          <Text
+            type="secondary"
+            style={{ marginRight: 8 }}
+          >
+            任务创建人：
+          </Text>
+          <Tooltip title={task.creator.username}>
+            <Avatar
+              src={resourcePath(task.creator.avatar) || undefined}
+              icon={!task.creator.avatar && <UserOutlined />}
+            />
+          </Tooltip>
+        </div>
+        <div style={contentStyle}>
+          <Text
+            type="secondary"
+            style={{ marginRight: 8 }}
+          >
+            任务负责人：
+          </Text>
+          <Avatar.Group
+            max={{
+              count: 3,
+            }}
+          >
+            {task?.members?.map((member) => (
+              <Tooltip
+                key={member.user_id}
+                title={member.username}
+              >
+                <Avatar
+                  src={resourcePath(member.avatar) || undefined}
+                  icon={!member.avatar && <UserOutlined />}
+                />
+              </Tooltip>
+            ))}
+          </Avatar.Group>
+        </div>
+      </Card>
     </div>
   )
 }

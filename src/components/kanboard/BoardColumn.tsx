@@ -10,6 +10,7 @@ import { ScrollArea, ScrollBar } from "./scroll-area"
 
 export interface Column {
   id: UniqueIdentifier
+  status: number
   title: string
 }
 
@@ -18,6 +19,7 @@ export type ColumnType = "Column"
 export interface ColumnDragData {
   type: ColumnType
   column: Column
+  status: number
 }
 
 interface BoardColumnProps {
@@ -34,6 +36,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
     data: {
       type: "Column",
       column,
+      status: column.status,
     } satisfies ColumnDragData,
     attributes: {
       roleDescription: `Column: ${column.title}`,
@@ -43,8 +46,8 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
   const style = {
     transition,
     transform: CSS.Translate.toString(transform),
-    height: 500,
-    maxHeight: 500,
+    height: "70vh",
+    maxHeight: "70vh",
     width: 350,
     backgroundColor: "#fff",
     flexShrink: 0,
@@ -86,9 +89,8 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
             display: "flex",
             flexDirection: "column",
             gap: 8,
-            height: 500,
-            minHeight: 500,
-            maxHeight: 500,
+            height: "70vh",
+            maxHeight: "70vh",
           },
           header: {
             borderBottom: "2px solid #f0f0f0",
@@ -96,10 +98,10 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
           },
         }}
         variant="borderless"
-        style={{ flex: 1, display: "flex", flexDirection: "column" }}
+        style={{ flex: 1, display: "flex", flexDirection: "column", height: "100%" }}
       >
         <ScrollArea>
-          <SortableContext items={tasksIds}>
+          <SortableContext items={tasksIds} id={column.id.toString()}>
             {tasks.map((task) => (
               <TaskCard
                 key={task.id}

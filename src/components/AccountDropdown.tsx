@@ -1,20 +1,24 @@
 import { useAction, useUserInfo } from "@/stores/userStore"
+import { resourcePath } from "@/utils"
 import { UserOutlined } from "@ant-design/icons"
 import { Avatar, Button, Divider, type MenuProps } from "antd"
 import Dropdown, { type DropdownProps } from "antd/es/dropdown/dropdown"
 import React from "react"
-import { NavLink, useNavigate } from "react-router"
+import { useNavigate } from "react-router"
 
 /**
  * Account Dropdown
  */
 function AccountDropdown() {
-  const { clearUserToken } = useAction()
+  const { clearUserToken, clearUserInfo, clearCurrentProject } = useAction()
   const navigate = useNavigate()
-  const { username, id } = useUserInfo()
+  const { username, avatar }: any = useUserInfo()
 
   const logout = () => {
     clearUserToken()
+    clearUserInfo()
+    clearCurrentProject()
+    localStorage.clear()
     navigate("/login", { replace: true })
   }
 
@@ -27,16 +31,14 @@ function AccountDropdown() {
 
   const items: MenuProps["items"] = [
     {
-      label: <NavLink to="/userInfo">个人资料</NavLink>,
-      key: "0",
-      style: { textAlign: "center" },
-      onClick: () => {
-        navigate(`/users/${id}`)
-      },
-    },
-    { type: "divider" },
-    {
-      label: <Button danger>退出</Button>,
+      label: (
+        <Button
+          type="link"
+          danger
+        >
+          退出
+        </Button>
+      ),
       key: "1",
       style: { textAlign: "center" },
       onClick: logout,
@@ -49,8 +51,11 @@ function AccountDropdown() {
       trigger={["click"]}
       dropdownRender={dropdownRender}
     >
-      <span style={{ display: "flex", height: 32, justifyContent: "center", alignItems: "center", cursor: "pointer" }}>
-        <Avatar icon={<UserOutlined />} />
+      <span style={{ display: "flex", height: 54, justifyContent: "center", alignItems: "center", cursor: "pointer" }}>
+        <Avatar
+          icon={resourcePath(avatar) ? null : <UserOutlined />}
+          src={resourcePath(avatar) || undefined}
+        />
         <span style={{ padding: "0 10px", fontSize: 16, fontWeight: 600 }}>{username}</span>
       </span>
     </Dropdown>

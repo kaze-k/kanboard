@@ -1,55 +1,56 @@
-import { getUser } from "@/api/services/users"
-import { KanbanBoard } from "@/components/kanboard"
+import { getTaskInfo } from "@/api/services/tasks"
 import Main from "@/layouts"
+import CreateTask from "@/pages/createTask"
+import Home from "@/pages/home"
 import Login from "@/pages/login"
 import Me from "@/pages/me"
 import Page404 from "@/pages/page404"
 import Project from "@/pages/project"
 import TaskInfo from "@/pages/taskInfo"
-import UserInfo from "@/pages/userInfo"
 import useUserStore from "@/stores/userStore"
 import { LoaderFunctionArgs, createBrowserRouter, redirect } from "react-router"
 
 const children = [
   {
-    index: true,
-    path: "/",
-    Component: KanbanBoard,
-  },
-  {
     path: "/project",
-    Component: Project,
+    children: [
+      {
+        index: true,
+        path: "/project/",
+        Component: Project,
+      },
+    ],
   },
   {
     path: "/me",
     Component: Me,
   },
   {
-    path: "/user",
+    path: "/task",
     children: [
       {
         index: true,
-        path: "/user/:id",
-        Component: UserInfo,
+        path: "/task/",
+        Component: Home,
+      },
+      {
+        path: "/task/createTask",
+        Component: CreateTask,
+      },
+      {
+        path: "/task/:id",
+        Component: TaskInfo,
         loader: async ({ params }: LoaderFunctionArgs) => {
-          const { id } = params
-          const res = await getUser(Number(id))
-          if (!res) {
+          const id = params.id
+          const projectId = useUserStore.getState().currentProject.project_id
+          if (id && projectId) {
+            const data = await getTaskInfo({ projectId, taskId: Number(id) })
+            if (!data) throw redirect("/404")
+            return data
+          } else {
             throw redirect("/404")
           }
-
-          return res
         },
-      },
-    ],
-  },
-  {
-    path: "/tasks",
-    children: [
-      {
-        index: true,
-        path: "/tasks/:id",
-        Component: TaskInfo,
       },
     ],
   },

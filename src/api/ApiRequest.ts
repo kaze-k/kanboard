@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
     if (code === 0) {
       if (message) {
         toast.success(message, {
-          position: "top-center",
+          position: "bottom-left",
         })
       }
       return data
@@ -51,7 +51,7 @@ axiosInstance.interceptors.response.use(
 
     const errMsg = response?.data?.message || message || "Error"
     toast.error(errMsg, {
-      position: "top-center",
+      position: "bottom-left",
     })
 
     const status = response?.status

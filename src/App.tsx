@@ -1,6 +1,7 @@
 import Logo from "@/assets/logo.png"
 import router from "@/router"
 import "@/styles/antd.scss"
+import "@/styles/custom.scss"
 import { Helmet } from "react-helmet-async"
 import { RouterProvider } from "react-router"
 import { Toaster } from "sonner"

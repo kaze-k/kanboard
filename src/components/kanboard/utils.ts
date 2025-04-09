@@ -1,7 +1,7 @@
 import { Active, DataRef, Over } from "@dnd-kit/core"
 
 import { ColumnDragData } from "./BoardColumn"
-import { TaskDragData } from "./TaskCard"
+import { Task, TaskDragData } from "./TaskCard"
 
 type DraggableData = ColumnDragData | TaskDragData
 
@@ -21,4 +21,11 @@ export function hasDraggableData<T extends Active | Over>(
   }
 
   return false
+}
+
+export function prefixTaskIds<T extends Task>(items: T[]): Task[] {
+  return items.map((item) => ({
+    ...item,
+    id: `task-${item.id}`,
+  }))
 }

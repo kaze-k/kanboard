@@ -17,7 +17,7 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 }
 
 const menuItems: MenuItem[] = [
-  getItem("看板", "/", <HomeOutlined />),
+  getItem("看板", "/task", <HomeOutlined />),
   getItem("项目", "/project", <ProjectOutlined />),
   getItem("我的", "/me", <UserOutlined />),
 ]
@@ -28,7 +28,7 @@ function MainNav() {
     <Sider
       style={{
         borderRight: "1px solid #f0f0f0",
-        position: "fixed",
+        position: "absolute",
         left: "16px",
         top: "50%",
         transform: "translateY(-50%)",

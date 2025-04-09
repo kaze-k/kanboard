@@ -2,6 +2,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ConfigProvider } from "antd"
 import zhCN from "antd/locale/zh_CN"
+import "dayjs/locale/zh-cn"
 import { Suspense } from "react"
 import ReactDOM from "react-dom/client"
 // helmet

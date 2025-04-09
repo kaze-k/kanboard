@@ -13,131 +13,51 @@ import {
   useSensors,
 } from "@dnd-kit/core"
 import { SortableContext, arrayMove } from "@dnd-kit/sortable"
-import { useMemo, useRef, useState } from "react"
+import { Col, Row } from "antd"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 
 import { BoardColumn } from "./BoardColumn"
 import type { Column } from "./BoardColumn"
 import { type Task, TaskCard } from "./TaskCard"
 import { coordinateGetter } from "./multipleContainersKeyboardPreset"
-import { hasDraggableData } from "./utils"
+import { hasDraggableData, prefixTaskIds } from "./utils"
 
 const defaultCols = [
   {
     id: 0 as const,
+    status: 0,
     title: "未完成",
   },
   {
     id: 1 as const,
+    status: 1,
     title: "进行中",
   },
   {
     id: 2 as const,
+    status: 2,
     title: "完成",
   },
 ] satisfies Column[]
 
 export type ColumnId = (typeof defaultCols)[number]["id"]
 
-const initialTasks: Task[] = [
-  {
-    id: "task1",
-    status: 2,
-    title: "Task 1",
-    desc: "Project initiation and planning",
-    proiority: 1,
-  },
-  {
-    id: "task2",
-    status: 2,
-    title: "Task 2",
-    desc: "Gather requirements from stakeholders",
-    proiority: 1,
-  },
-  {
-    id: "task3",
-    status: 2,
-    title: "Task 3",
-    desc: "Create wireframes and mockups",
-    proiority: 1,
-  },
-  {
-    id: "task4",
-    status: 1,
-    title: "Task 4",
-    desc: "Develop homepage layout",
-    proiority: 0,
-  },
-  {
-    id: "task5",
-    status: 1,
-    title: "Task 5",
-    desc: "Design color scheme and typography",
-    proiority: 0,
-  },
-  {
-    id: "task6",
-    status: 0,
-    title: "Task 6",
-    desc: "Implement user authentication",
-    proiority: 0,
-  },
-  {
-    id: "task7",
-    status: 0,
-    title: "Task 7",
-    desc: "Build contact us page",
-    proiority: 0,
-  },
-  {
-    id: "task8",
-    status: 0,
-    title: "Task 8",
-    desc: "Create product catalog",
-    proiority: 0,
-  },
-  {
-    id: "task9",
-    status: 0,
-    title: "Task 9",
-    desc: "Develop about us page",
-    proiority: 0,
-  },
-  {
-    id: "task10",
-    status: 0,
-    title: "Task 10",
-    desc: "Optimize website for mobile devices",
-    proiority: -1,
-  },
-  {
-    id: "task11",
-    status: 0,
-    title: "Task 11",
-    desc: "Integrate payment gateway",
-    proiority: 0,
-  },
-  {
-    id: "task12",
-    status: 0,
-    title: "Task 12",
-    desc: "Perform testing and bug fixing",
-    proiority: 1,
-  },
-  {
-    id: "task13",
-    status: 0,
-    title: "Task 13",
-    desc: "Launch website and deploy to server",
-    proiority: 0,
-  },
-]
-export function KanbanBoard() {
+export function KanbanBoard({
+  initialTasks,
+  onHandleDragEnd,
+}: {
+  initialTasks: Task[]
+  onHandleDragEnd?: (status: number, taskId: number, projectId: number) => void
+}) {
   const [columns, setColumns] = useState<Column[]>(defaultCols)
   const pickedUpTaskColumn = useRef<ColumnId | null>(null)
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
 
-  const [tasks, setTasks] = useState<Task[]>(initialTasks)
+  const [tasks, setTasks] = useState<Task[]>(prefixTaskIds(initialTasks))
+  useEffect(() => {
+    setTasks(prefixTaskIds(initialTasks))
+  }, [initialTasks])
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null)
 
@@ -230,30 +150,24 @@ export function KanbanBoard() {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        margin: "0 80px",
+    <DndContext
+      accessibility={{
+        announcements,
       }}
+      sensors={sensors}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDragOver={onDragOver}
     >
-      <DndContext
-        accessibility={{
-          announcements,
-        }}
-        sensors={sensors}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-        onDragOver={onDragOver}
-      >
+      <Row>
         <SortableContext items={columnsId}>
           {columns.map((col) => (
-            <BoardColumn
-              key={col.id}
-              column={col}
-              tasks={tasks.filter((task) => task.status === col.id)}
-            />
+            <Col key={col.id}>
+              <BoardColumn
+                column={col}
+                tasks={tasks.filter((task) => task.status === col.id)}
+              />
+            </Col>
           ))}
         </SortableContext>
 
@@ -276,8 +190,8 @@ export function KanbanBoard() {
             </DragOverlay>,
             document.body,
           )}
-      </DndContext>
-    </div>
+      </Row>
+    </DndContext>
   )
 
   function onDragStart(event: DragStartEvent) {
@@ -299,6 +213,15 @@ export function KanbanBoard() {
     setActiveTask(null)
 
     const { active, over } = event
+
+    const isTask = active.data.current?.type === "Task"
+    const status = Number(active.data.current?.sortable.containerId)
+    if (isTask && [0, 1, 2].includes(status)) {
+      const taskId = Number(active.data.current?.task.id.split("-")[1])
+      const projectId = active.data.current?.task.project_id
+      onHandleDragEnd && onHandleDragEnd(status, taskId, projectId)
+    }
+
     if (!over) return
 
     const activeId = active.id

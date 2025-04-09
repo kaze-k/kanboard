@@ -1,9 +1,9 @@
-import { LoginRequest } from "#/api"
+import { LoginRequest, RegisterRequest } from "#/api"
 import { captcha } from "@/api/services/users"
-import { useLogin } from "@/stores/userStore"
-import { EyeOutlined, UserOutlined } from "@ant-design/icons"
+import { useLogin, useRegister } from "@/stores/userStore"
+import { LockOutlined, SkinOutlined, UserOutlined } from "@ant-design/icons"
 import { useQuery } from "@tanstack/react-query"
-import { Button, Card, Col, Form, Input, Row } from "antd"
+import { Button, Card, Col, Form, Input, Row, Select } from "antd"
 import { useEffect, useState } from "react"
 
 function LoginForm() {
@@ -12,6 +12,8 @@ function LoginForm() {
   const [value, setValue] = useState("")
   const [form] = Form.useForm()
   const login = useLogin()
+  const register = useRegister()
+
   const { data, refetch } = useQuery({
     queryKey: ["captcha"],
     queryFn: captcha,
@@ -19,6 +21,7 @@ function LoginForm() {
   })
 
   useEffect(() => {
+    refetch()
     if (isRegister) form.resetFields()
   }, [isRegister])
 
@@ -41,7 +44,26 @@ function LoginForm() {
     }
   }
 
-  const handleRegister = () => {}
+  const handleRegister = async ({ username, password, gender, captchaAnswer }: RegisterRequest) => {
+    setLoading(true)
+    try {
+      await register(
+        {
+          username,
+          password,
+          captchaId: data?.id,
+          gender,
+          captchaAnswer,
+        },
+        refetch,
+      )
+    } finally {
+      setLoading(false)
+      setValue("")
+      form.setFieldValue("captchaAnswer", "")
+      setIsRegister(false)
+    }
+  }
 
   return (
     <Card
@@ -81,7 +103,7 @@ function LoginForm() {
               size="large"
               type="password"
               placeholder={"密码"}
-              prefix={<EyeOutlined />}
+              prefix={<LockOutlined />}
             />
           </Form.Item>
           <Form.Item
@@ -151,7 +173,7 @@ function LoginForm() {
               size="large"
               type="password"
               placeholder={"请输入密码"}
-              prefix={<EyeOutlined />}
+              prefix={<LockOutlined />}
             />
           </Form.Item>
           <Form.Item
@@ -184,8 +206,21 @@ function LoginForm() {
               size="large"
               type="password"
               placeholder={"请再次输入密码"}
-              prefix={<EyeOutlined />}
+              prefix={<LockOutlined />}
             />
+          </Form.Item>
+          <Form.Item
+            name="gender"
+            rules={[{ required: true, message: "请选择性别" }]}
+          >
+            <Select
+              size="large"
+              placeholder="请选择性别"
+              prefix={<SkinOutlined />}
+            >
+              <Select.Option value={1}>男</Select.Option>
+              <Select.Option value={2}>女</Select.Option>
+            </Select>
           </Form.Item>
           <Form.Item
             name="captchaAnswer"
