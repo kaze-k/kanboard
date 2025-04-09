@@ -101,7 +101,10 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
         style={{ flex: 1, display: "flex", flexDirection: "column", height: "100%" }}
       >
         <ScrollArea>
-          <SortableContext items={tasksIds} id={column.id.toString()}>
+          <SortableContext
+            items={tasksIds}
+            id={column.id.toString()}
+          >
             {tasks.map((task) => (
               <TaskCard
                 key={task.id}

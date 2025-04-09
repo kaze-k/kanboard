@@ -51,7 +51,7 @@ export const deleteTask = (data: TaskDeleteRequest) => {
   return ApiRequest.delete({ url: `/${id}/deleteTask`, data })
 }
 
-export const getTaskInfo = ({ projectId, taskId }: { projectId: number, taskId: number }) => {
+export const getTaskInfo = ({ projectId, taskId }: { projectId: number; taskId: number }) => {
   const id = useUserStore.getState().userInfo.id
   return ApiRequest.get({ url: `/${id}/getTask?project_id=${projectId}&task_id=${taskId}` })
 }
