@@ -190,10 +190,10 @@ function MessageButton() {
                   message={message.content}
                   created_at={message.created_at}
                   onGoto={() => {
+                    setCurrentProject({ project_id: message.project_id })
                     if (message.task_id) {
                       navigate(`/task/${message.task_id}`)
                     } else {
-                      setCurrentProject({ project_id: message.project_id })
                       navigate("/project")
                     }
                     setOpen(false)
@@ -224,10 +224,10 @@ function MessageButton() {
               message={message.content}
               created_at={message.created_at}
               onGoto={() => {
+                setCurrentProject({ project_id: message.project_id })
                 if (message.task_id) {
                   navigate(`/task/${message.task_id}`)
                 } else {
-                  setCurrentProject({ project_id: message.project_id })
                   navigate("/project")
                 }
                 setOpen(false)

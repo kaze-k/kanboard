@@ -1,9 +1,11 @@
 import { MsgType } from "#/api"
-import { ReactNode, createContext, useContext } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { ReactNode, createContext, useContext, useEffect } from "react"
 import useWebSocket from "react-use-websocket"
 import { WebSocketHook } from "react-use-websocket/dist/lib/types"
 
-import { useUserInfo, useUserToken } from "./stores/userStore"
+import { getUser } from "./api/services/users"
+import { useAction, useUserInfo, useUserToken } from "./stores/userStore"
 
 interface WebSocketProviderProps {
   children: ReactNode
@@ -25,6 +27,21 @@ function WebSocketProvider({ children }: WebSocketProviderProps) {
       queryParams: { token: accessToken ? accessToken : "" },
       shouldReconnect: () => true,
     })
+
+  const { setUserInfo } = useAction()
+
+  const getUserInfo = useMutation({
+    mutationFn: getUser,
+    onSuccess: (data) => {
+      setUserInfo(data)
+    },
+  })
+
+  useEffect(() => {
+    if (lastJsonMessage?.message_type === "update_user") {
+      getUserInfo.mutate()
+    }
+  }, [lastJsonMessage])
 
   const value = {
     sendMessage,
