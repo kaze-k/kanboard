@@ -1,9 +1,9 @@
+import { MsgType } from "#/api"
 import { ReactNode, createContext, useContext } from "react"
 import useWebSocket from "react-use-websocket"
 import { WebSocketHook } from "react-use-websocket/dist/lib/types"
 
 import { useUserInfo, useUserToken } from "./stores/userStore"
-import { MsgType } from "#/api"
 
 interface WebSocketProviderProps {
   children: ReactNode
@@ -18,15 +18,13 @@ function WebSocketProvider({ children }: WebSocketProviderProps) {
 
   const isConn = id && accessToken ? true : false
 
-  const { sendMessage, sendJsonMessage, lastMessage, lastJsonMessage, readyState, getWebSocket } = useWebSocket<MsgType>(
-    isConn ? socketUrl : null,
-    {
+  const { sendMessage, sendJsonMessage, lastMessage, lastJsonMessage, readyState, getWebSocket } =
+    useWebSocket<MsgType>(isConn ? socketUrl : null, {
       heartbeat: false,
       share: true,
       queryParams: { token: accessToken ? accessToken : "" },
       shouldReconnect: () => true,
-    },
-  )
+    })
 
   const value = {
     sendMessage,

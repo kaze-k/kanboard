@@ -228,7 +228,12 @@ const Me: React.FC = () => {
     {
       key: "calendar",
       label: "我的日程",
-      children: <Calendar cellRender={dateCellRender} onPanelChange={(_, mode) => setMode(mode)} />,
+      children: (
+        <Calendar
+          cellRender={dateCellRender}
+          onPanelChange={(_, mode) => setMode(mode)}
+        />
+      ),
     },
     {
       key: "stats",

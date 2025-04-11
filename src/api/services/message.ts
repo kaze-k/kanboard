@@ -1,7 +1,7 @@
+import { MsgMarkRequest } from "#/api"
 import useUserStore from "@/stores/userStore"
 
 import ApiRequest from "../ApiRequest"
-import { MsgMarkRequest } from "#/api"
 
 export const getUnReadMsgs = () => {
   const id = useUserStore.getState().userInfo.id
