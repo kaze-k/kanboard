@@ -10,7 +10,6 @@ import "@wangeditor/editor/dist/css/style.css"
 import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Tag } from "antd"
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
-import { toast } from "sonner"
 
 export type InsertFnType = (url: string, alt: string, href: string) => void
 
@@ -33,8 +32,9 @@ const CreateTask: React.FC = () => {
 
   const createTaskMutation = useMutation({
     mutationFn: createTask,
-    onSuccess: () => {
-      navigate("/task")
+    onSuccess: (data) => {
+      if (data) navigate(`/task/${data}`)
+      else navigate("/task")
     },
     onError: () => {
       form.resetFields()
@@ -65,9 +65,6 @@ const CreateTask: React.FC = () => {
       due_date: values?.due_date?.valueOf(),
       assignees: selectedAssignees,
     }
-    toast.success("任务创建成功", {
-      position: "bottom-left",
-    })
     createTaskMutation.mutate(taskData)
   }
 
@@ -157,6 +154,8 @@ const CreateTask: React.FC = () => {
             rules={[{ required: true, message: "请选择负责人" }]}
           >
             <Select
+              showSearch
+              optionFilterProp="label"
               mode="multiple"
               placeholder="请选择负责人"
               onChange={(selectedValues) => {
@@ -171,6 +170,7 @@ const CreateTask: React.FC = () => {
                 <Select.Option
                   key={member.user_id}
                   value={member.user_id}
+                  label={member.username}
                 >
                   {member.username}
                 </Select.Option>

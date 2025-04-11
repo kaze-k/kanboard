@@ -23,3 +23,13 @@ export const changePassword = (data: ChangePasswordRequest) => {
   const id = useUserStore.getState().userInfo.id
   return ApiRequest.post({ url: `/${id}/password`, data })
 }
+
+export const getStatistics = () => {
+  const id = useUserStore.getState().userInfo.id
+  return ApiRequest.get({ url: `/${id}/statistics` })
+}
+
+export const getCalendar = () => {
+  const id = useUserStore.getState().userInfo.id
+  return ApiRequest.get({ url: `/${id}/calendar` })
+}

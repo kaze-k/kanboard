@@ -12,18 +12,8 @@ import { LoaderFunctionArgs, createBrowserRouter, redirect } from "react-router"
 
 const children = [
   {
-    path: "/project",
-    children: [
-      {
-        index: true,
-        path: "/project/",
-        Component: Project,
-      },
-    ],
-  },
-  {
-    path: "/me",
-    Component: Me,
+    path: "/",
+    loader: () => redirect("/task"),
   },
   {
     path: "/task",
@@ -53,6 +43,20 @@ const children = [
         },
       },
     ],
+  },
+  {
+    path: "/project",
+    children: [
+      {
+        index: true,
+        path: "/project/",
+        Component: Project,
+      },
+    ],
+  },
+  {
+    path: "/me",
+    Component: Me,
   },
 ]
 

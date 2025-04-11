@@ -81,12 +81,12 @@ function Home() {
 
   const updateTaskMutation = useMutation({
     mutationFn: updateTaskStatus,
-    onSuccess: async () => {
-      const result = isSearch
-        ? await searchTaskMutation.mutateAsync(searchParams)
-        : await getTasksMutation.mutateAsync(currentProject.project_id as number)
-      setTasks(result)
-    },
+    // onSuccess: async () => {
+    //   const result = isSearch
+    //     ? await searchTaskMutation.mutateAsync(searchParams)
+    //     : await getTasksMutation.mutateAsync(currentProject.project_id as number)
+    //   setTasks(result)
+    // },
     onError: async () => {
       const result = isSearch
         ? await searchTaskMutation.mutateAsync(searchParams)

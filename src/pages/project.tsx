@@ -1,3 +1,4 @@
+import { getMsgByProjectId } from "@/api/services/message"
 import { addProjectMember, getMembers, getProject, removeProjectMember } from "@/api/services/projects"
 import { useCurrentProject, useCurrentProjectIsAssigned, useUserInfo } from "@/stores/userStore"
 import { resourcePath } from "@/utils"
@@ -16,7 +17,7 @@ import {
   UserOutlined,
   WomanOutlined,
 } from "@ant-design/icons"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import {
   Avatar,
   Button,
@@ -35,13 +36,6 @@ import {
 import { throttle } from "lodash"
 import React, { useEffect, useRef, useState } from "react"
 
-const recentUpdates = [
-  { content: "任务『登录功能』已完成", time: "2025-04-09 09:00" },
-  { content: "新增任务『用户权限设计』", time: "2025-04-08 17:30" },
-  { content: "任务『接口联调』标记为进行中", time: "2025-04-08 15:10" },
-  { content: "成员小明加入项目", time: "2025-04-07 11:42" },
-]
-
 const Project: React.FC = () => {
   const [project, setProject] = useState<any>(null)
   const currentProject = useCurrentProject()
@@ -50,6 +44,11 @@ const Project: React.FC = () => {
   const [selectedMembers, setSelectedAssignees] = useState([])
   const [members, setMembers] = useState([])
   const { id } = useUserInfo()
+
+  const { data: recentUpdates } = useQuery({
+    queryKey: ["recentUpdates", currentProject.project_id],
+    queryFn: () => getMsgByProjectId(currentProject.project_id as number),
+  })
 
   const getProjectMutation = useMutation({
     mutationFn: getProject,
@@ -227,6 +226,8 @@ const Project: React.FC = () => {
           (isAdd ? (
             <Space style={{ margin: "0 8px" }}>
               <Select
+                showSearch
+                optionFilterProp="label"
                 placeholder="选择负责人"
                 style={{ width: 200 }}
                 mode="multiple"
@@ -242,6 +243,7 @@ const Project: React.FC = () => {
                   <Select.Option
                     key={member.user_id}
                     value={member.user_id}
+                    label={member.username}
                   >
                     {member.username}
                   </Select.Option>
@@ -334,8 +336,8 @@ const Project: React.FC = () => {
       >
         <List
           dataSource={recentUpdates}
-          renderItem={(item, index) => (
-            <List.Item key={index}>
+          renderItem={(item: any, index) => (
+            <List.Item key={item.id || index}>
               <List.Item.Meta
                 avatar={
                   <Avatar
@@ -344,7 +346,7 @@ const Project: React.FC = () => {
                   />
                 }
                 title={item.content}
-                description={item.time}
+                description={item.created_at}
               />
             </List.Item>
           )}

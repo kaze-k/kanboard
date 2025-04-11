@@ -24,7 +24,8 @@ export interface RegisterRequest {
 
 export interface ChangePasswordRequest {
   id: number
-  password: string
+  current: string
+  new: string
 }
 
 export interface UserUpdateRequest {
@@ -32,7 +33,6 @@ export interface UserUpdateRequest {
   avatar?: number
   email?: string
   mobile?: string
-  gender?: number
 }
 
 interface Member {
@@ -99,4 +99,15 @@ export interface TaskSearchRequest {
   priority?: number
   user_id?: number
   creator_id?: number
+}
+
+export interface MsgMarkRequest {
+  id: number
+  msg_id: string
+}
+
+export interface MsgType {
+  message_type: string
+  unread_count: number
+  payload: any
 }

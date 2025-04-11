@@ -27,7 +27,15 @@ const useUserStore = create<UserStore>()(
       userInfo: {},
       userToken: {},
       action: {
-        setCurrentProject: (currentProject) => set({ currentProject }),
+        setCurrentProject: (currentProject) => {
+          if (currentProject.project_id && !currentProject.project_name) {
+            const { projects } = useUserStore.getState().userInfo
+            currentProject.project_name = projects?.find(
+              (project) => project.project_id === currentProject.project_id,
+            )?.project_name
+          }
+          return set({ currentProject })
+        },
         setUserInfo: (userInfo) => set({ userInfo }),
         setUserToken: (userToken) => set({ userToken }),
         clearUserToken: () => set({ userToken: {} }),

@@ -1,8 +1,9 @@
 import Logo from "@/assets/logo.png"
 import AccountDropdown from "@/components/AccountDropdown"
 import FullscreenButton from "@/components/FullscreenButton"
+import MessageButton from "@/components/MessageButton"
 import ProjectSwitcher from "@/components/projectSwitcher"
-import { Layout, theme } from "antd"
+import { Layout, Space, theme } from "antd"
 import { NavLink } from "react-router"
 
 const { Header } = Layout
@@ -50,7 +51,10 @@ function MainHeader() {
       </NavLink>
       <ProjectSwitcher />
       <div style={{ display: "flex", alignItems: "center" }}>
-        <FullscreenButton />
+        <Space>
+          <FullscreenButton />
+          <MessageButton />
+        </Space>
         <div style={{ width: 2, height: 20, margin: "0 10px" }} />
         <AccountDropdown />
       </div>

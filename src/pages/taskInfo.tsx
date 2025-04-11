@@ -331,6 +331,8 @@ function TaskInfo() {
             (isAdd ? (
               <Space style={{ margin: "0 8px" }}>
                 <Select
+                  showSearch
+                  optionFilterProp="label"
                   placeholder="选择负责人"
                   style={{ width: 200 }}
                   mode="multiple"
@@ -346,6 +348,7 @@ function TaskInfo() {
                     <Select.Option
                       key={member.user_id}
                       value={member.user_id}
+                      label={member.username}
                     >
                       {member.username}
                     </Select.Option>
