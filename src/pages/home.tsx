@@ -3,6 +3,7 @@ import { getProjectMembers } from "@/api/services/projects"
 import { getTasks, searchTask, updateTaskStatus } from "@/api/services/tasks"
 import { KanbanBoard } from "@/components/kanboard"
 import { useCurrentProject } from "@/stores/userStore"
+import { useWebSocketContext } from "@/webSocketProvider"
 import { useMutation } from "@tanstack/react-query"
 import { Button, Card, Col, Form, Input, Row, Select, Tag } from "antd"
 import { useEffect, useState } from "react"
@@ -17,6 +18,7 @@ function Home() {
   const [form] = Form.useForm()
   const [isSearch, setIsSearch] = useState(false)
   const [searchParams, setSearchParams] = useState({})
+  const { lastJsonMessage } = useWebSocketContext()
 
   const getTasksMutation = useMutation({
     mutationFn: getTasks,
@@ -32,12 +34,14 @@ function Home() {
 
   useEffect(() => {
     if (currentProject.project_id === 0) return
+    if (lastJsonMessage && lastJsonMessage?.message_type !== "new_task_status") return
+
     getTasksMutation.mutate(currentProject.project_id as number, {
       onSuccess: (data) => {
         setData(data)
       },
     })
-  }, [currentProject])
+  }, [currentProject, lastJsonMessage?.message_type])
 
   useEffect(() => {
     if (!data) return
@@ -81,12 +85,12 @@ function Home() {
 
   const updateTaskMutation = useMutation({
     mutationFn: updateTaskStatus,
-    // onSuccess: async () => {
-    //   const result = isSearch
-    //     ? await searchTaskMutation.mutateAsync(searchParams)
-    //     : await getTasksMutation.mutateAsync(currentProject.project_id as number)
-    //   setTasks(result)
-    // },
+    onSuccess: async () => {
+      const result = isSearch
+        ? await searchTaskMutation.mutateAsync(searchParams)
+        : await getTasksMutation.mutateAsync(currentProject.project_id as number)
+      setTasks(result)
+    },
     onError: async () => {
       const result = isSearch
         ? await searchTaskMutation.mutateAsync(searchParams)

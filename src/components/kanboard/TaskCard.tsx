@@ -24,6 +24,7 @@ export interface Task {
   priority: number
   members: Member[]
   creator: Member
+  updated_at: string
 }
 
 interface TaskCardProps {

@@ -146,6 +146,7 @@ function MessageButton() {
   })
 
   useEffect(() => {
+    if (lastJsonMessage?.message_type !== "new_message") return
     openNotification()
     getUnReadMsgMutation.mutate(undefined)
 

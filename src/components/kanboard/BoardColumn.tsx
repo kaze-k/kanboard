@@ -29,6 +29,7 @@ interface BoardColumnProps {
 }
 
 export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
+  tasks = tasks.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
   const tasksIds = useMemo(() => tasks.map((task) => task.id), [tasks])
 
   const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
