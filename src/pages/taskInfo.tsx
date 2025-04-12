@@ -222,6 +222,7 @@ function TaskInfo() {
               onChange={(value) =>
                 updateTaskMutation.mutate({ id: task.id, project_id: task.project_id, priority: value })
               }
+              disabled={!(task?.creator?.id === id || assignee)}
             >
               <Select.Option value={1}>
                 <Tag color="red">高</Tag>
@@ -240,6 +241,7 @@ function TaskInfo() {
               onChange={(date) =>
                 updateTaskMutation.mutate({ id: task.id, project_id: task.project_id, due_date: date?.valueOf() })
               }
+              disabled={!(task?.creator?.id === id || assignee)}
             />
           </Descriptions.Item>
           <Descriptions.Item label="创建人">

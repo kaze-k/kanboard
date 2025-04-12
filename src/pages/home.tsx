@@ -30,6 +30,11 @@ function Home() {
         setMembers(data)
       },
     })
+    getTasksMutation.mutate(currentProject.project_id as number, {
+      onSuccess: (data) => {
+        setData(data)
+      },
+    })
   }, [])
 
   useEffect(() => {
@@ -41,7 +46,7 @@ function Home() {
         setData(data)
       },
     })
-  }, [currentProject, lastJsonMessage?.message_type])
+  }, [currentProject.project_id, lastJsonMessage?.message_type])
 
   useEffect(() => {
     if (!data) return

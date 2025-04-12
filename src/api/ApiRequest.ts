@@ -60,6 +60,10 @@ axiosInstance.interceptors.response.use(
       window.location.replace("/login")
     }
 
+    if (status === 400) {
+      return
+    }
+
     if (status === 404) {
       window.location.replace("/404")
     }

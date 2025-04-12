@@ -181,33 +181,32 @@ function MessageButton() {
           direction="vertical"
           style={{ width: "100%" }}
         >
-          {unreadMsg
-            .reverse()
-            .map(
-              (message: { id: string; content: string; created_at: string; task_id: number; project_id: number }) => (
-                <MessageCard
-                  dot
-                  key={message.id}
-                  message={message.content}
-                  created_at={message.created_at}
-                  onGoto={() => {
-                    setCurrentProject({ project_id: message.project_id })
-                    if (message.task_id) {
-                      navigate(`/task/${message.task_id}`)
-                    } else {
-                      navigate("/project")
-                    }
-                    setOpen(false)
-                  }}
-                  onClick={() => {
-                    const id = useUserStore.getState().userInfo.id
-                    if (id) {
-                      markReadedMutation.mutate({ id: Number(id), msg_id: String(message.id) })
-                    }
-                  }}
-                />
-              ),
-            )}
+          {unreadMsg.map(
+            (message: { id: string; content: string; created_at: string; task_id: number; project_id: number }) => (
+              <MessageCard
+                dot
+                key={message.id}
+                message={message.content}
+                created_at={message.created_at}
+                onGoto={() => {
+                  setCurrentProject({ project_id: message.project_id })
+                  if (message.task_id) {
+                    navigate(`/task/${message.task_id}`)
+                  } else {
+                    navigate("/project")
+                  }
+                  setOpen(false)
+                }}
+                onClick={(e: any) => {
+                  e.stopPropagation()
+                  const id = useUserStore.getState().userInfo.id
+                  if (id) {
+                    markReadedMutation.mutate({ id: Number(id), msg_id: String(message.id) })
+                  }
+                }}
+              />
+            ),
+          )}
         </Space>
       ),
     },
@@ -219,7 +218,7 @@ function MessageButton() {
           direction="vertical"
           style={{ width: "100%" }}
         >
-          {readedMsg.reverse().map((message: any) => (
+          {readedMsg.map((message: any) => (
             <MessageCard
               key={message.id}
               message={message.content}

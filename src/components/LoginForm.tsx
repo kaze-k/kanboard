@@ -96,7 +96,10 @@ function LoginForm() {
           </Form.Item>
           <Form.Item
             name="password"
-            rules={[{ required: true, message: "请输入密码" }]}
+            rules={[
+              { required: true, message: "请输入密码" },
+              { min: 4, message: "密码至少4位" },
+            ]}
           >
             <Input.Password
               allowClear
@@ -166,7 +169,10 @@ function LoginForm() {
           </Form.Item>
           <Form.Item
             name="password"
-            rules={[{ required: true, message: "请输入密码" }]}
+            rules={[
+              { required: true, message: "请输入密码" },
+              { min: 4, message: "密码至少4位" },
+            ]}
           >
             <Input.Password
               allowClear

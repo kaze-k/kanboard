@@ -147,10 +147,22 @@ const Me: React.FC = () => {
   }
 
   const handleSaveEmail = () => {
+    if (emailValue && !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(emailValue)) {
+      toast.error("邮箱格式不正确", {
+        position: "bottom-left",
+      })
+      return
+    }
     if (emailValue !== email) UpdateUserMutation.mutate({ id: Number(id), email: emailValue })
     setIsEditEmail(false)
   }
   const handleSaveMobile = () => {
+    if (mobileValue && !/^1[3-9]\d{9}$/.test(mobileValue)) {
+      toast.error("手机号格式不正确", {
+        position: "bottom-left",
+      })
+      return
+    }
     if (mobileValue !== mobile) UpdateUserMutation.mutate({ id: Number(id), mobile: mobileValue })
     setIsEditMobile(false)
   }
@@ -353,7 +365,10 @@ const Me: React.FC = () => {
                         <Input
                           size="small"
                           defaultValue={mobile}
-                          onChange={(e) => setMobileValue(e.target.value)}
+                          onChange={(e) => {
+                            setMobileValue(e.target.value)
+                          }}
+                          maxLength={11}
                         />
                         <Button
                           size="small"
@@ -445,14 +460,20 @@ const Me: React.FC = () => {
           <Form.Item
             label="当前密码"
             name="current"
-            rules={[{ required: true, message: "请输入当前密码" }]}
+            rules={[
+              { required: true, message: "请输入当前密码" },
+              { min: 4, message: "密码至少4位" },
+            ]}
           >
             <Input.Password prefix={<LockOutlined />} />
           </Form.Item>
           <Form.Item
             label="新密码"
             name="new"
-            rules={[{ required: true, message: "请输入新密码" }]}
+            rules={[
+              { required: true, message: "请输入新密码" },
+              { min: 4, message: "密码至少4位" },
+            ]}
           >
             <Input.Password prefix={<LockOutlined />} />
           </Form.Item>
