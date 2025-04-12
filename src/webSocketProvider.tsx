@@ -28,12 +28,17 @@ function WebSocketProvider({ children }: WebSocketProviderProps) {
       shouldReconnect: () => true,
     })
 
-  const { setUserInfo } = useAction()
+  const { setUserInfo, setCurrentProject } = useAction()
 
   const getUserInfo = useMutation({
     mutationFn: getUser,
     onSuccess: (data) => {
       setUserInfo(data)
+      if (data.projects.length) {
+        setCurrentProject({ project_id: data.projects[0].project_id, project_name: data.projects[0].project_name })
+      } else {
+        setCurrentProject({ project_id: 0, project_name: "" })
+      }
     },
   })
 

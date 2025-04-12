@@ -47,18 +47,21 @@ const Project: React.FC = () => {
 
   const { data: recentUpdates } = useQuery({
     queryKey: ["recentUpdates", currentProject.project_id],
-    queryFn: () => getMsgByProjectId(currentProject.project_id as number),
+    queryFn:
+      currentProject.project_id === 0
+        ? () => Promise.resolve([])
+        : () => getMsgByProjectId(currentProject.project_id as number),
   })
 
   const getProjectMutation = useMutation({
-    mutationFn: getProject,
+    mutationFn: currentProject.project_id === 0 ? () => Promise.resolve({}) : getProject,
     onSuccess: (data) => {
       setProject(data)
     },
   })
 
   const getMembersMutation = useMutation({
-    mutationFn: getMembers,
+    mutationFn: currentProject.project_id === 0 ? () => Promise.resolve([]) : getMembers,
     onSuccess: (data) => {
       setMembers(data)
       getProjectMutation.mutate(currentProject.project_id as number)
@@ -80,6 +83,7 @@ const Project: React.FC = () => {
   })
 
   useEffect(() => {
+    if (currentProject.project_id === 0) return
     getProjectMutation.mutate(currentProject.project_id as number)
   }, [currentProject.project_id])
 

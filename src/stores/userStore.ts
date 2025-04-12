@@ -86,7 +86,11 @@ export const useLogin = () => {
       const { user, token } = res
       setUserInfo(user)
       setUserToken({ accessToken: token })
-      setCurrentProject({ project_id: user.projects[0].project_id, project_name: user.projects[0].project_name })
+      if (user.projects.length) {
+        setCurrentProject({ project_id: user.projects[0].project_id, project_name: user.projects[0].project_name })
+      } else {
+        setCurrentProject({ project_id: 0, project_name: "" })
+      }
       navigate("/task", { replace: true })
     } catch (err) {
       refetch()

@@ -25,12 +25,13 @@ function Home() {
   })
 
   useEffect(() => {
-    getProjectMembersMutation.mutate(currentProject.project_id as number, {
+    if (currentProject?.project_id === 0) return
+    getProjectMembersMutation.mutate(currentProject?.project_id as number, {
       onSuccess: (data) => {
         setMembers(data)
       },
     })
-    getTasksMutation.mutate(currentProject.project_id as number, {
+    getTasksMutation.mutate(currentProject?.project_id as number, {
       onSuccess: (data) => {
         setData(data)
       },
@@ -38,15 +39,15 @@ function Home() {
   }, [])
 
   useEffect(() => {
-    if (currentProject.project_id === 0) return
+    if (currentProject?.project_id === 0) return
     if (lastJsonMessage && lastJsonMessage?.message_type !== "new_task_status") return
 
-    getTasksMutation.mutate(currentProject.project_id as number, {
+    getTasksMutation.mutate(currentProject?.project_id as number, {
       onSuccess: (data) => {
         setData(data)
       },
     })
-  }, [currentProject.project_id, lastJsonMessage?.message_type])
+  }, [currentProject?.project_id, lastJsonMessage?.message_type])
 
   useEffect(() => {
     if (!data) return
@@ -65,7 +66,7 @@ function Home() {
     setIsSearch(true)
     setSearchParams({ ...values, project_id: currentProject })
     searchTaskMutation.mutate(
-      { ...values, project_id: currentProject.project_id as number },
+      { ...values, project_id: currentProject?.project_id as number },
       {
         onSuccess: (data) => {
           setTasks(data)
@@ -77,7 +78,7 @@ function Home() {
   const handleReset = () => {
     setIsSearch(false)
     form.resetFields()
-    getTasksMutation.mutate(currentProject.project_id as number, {
+    getTasksMutation.mutate(currentProject?.project_id as number, {
       onSuccess: (data) => {
         setTasks(data)
       },
@@ -93,13 +94,13 @@ function Home() {
     onSuccess: async () => {
       const result = isSearch
         ? await searchTaskMutation.mutateAsync(searchParams)
-        : await getTasksMutation.mutateAsync(currentProject.project_id as number)
+        : await getTasksMutation.mutateAsync(currentProject?.project_id as number)
       setTasks(result)
     },
     onError: async () => {
       const result = isSearch
         ? await searchTaskMutation.mutateAsync(searchParams)
-        : await getTasksMutation.mutateAsync(currentProject.project_id as number)
+        : await getTasksMutation.mutateAsync(currentProject?.project_id as number)
       setTasks(result)
     },
   })
@@ -153,7 +154,7 @@ function Home() {
               style={{ width: 120 }}
               allowClear
               onClick={() => {
-                getProjectMembersMutation.mutate(currentProject.project_id as number, {
+                getProjectMembersMutation.mutate(currentProject?.project_id as number, {
                   onSuccess: (data) => {
                     setMembers(data)
                   },
@@ -176,7 +177,7 @@ function Home() {
               style={{ width: 120 }}
               allowClear
               onClick={() => {
-                getProjectMembersMutation.mutate(currentProject.project_id as number, {
+                getProjectMembersMutation.mutate(currentProject?.project_id as number, {
                   onSuccess: (data) => {
                     setMembers(data)
                   },
@@ -214,6 +215,7 @@ function Home() {
           <Button
             type="primary"
             onClick={handleCreateTask}
+            disabled={currentProject.project_id === 0}
           >
             创建任务
           </Button>
