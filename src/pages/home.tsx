@@ -25,7 +25,7 @@ function Home() {
   })
 
   useEffect(() => {
-    if (currentProject?.project_id === 0) return
+    if (!currentProject?.project_id) return
     getProjectMembersMutation.mutate(currentProject?.project_id as number, {
       onSuccess: (data) => {
         setMembers(data)
@@ -39,15 +39,27 @@ function Home() {
   }, [])
 
   useEffect(() => {
-    if (currentProject?.project_id === 0) return
+    if (!currentProject?.project_id) return
     if (lastJsonMessage && lastJsonMessage?.message_type !== "new_task_status") return
+    getTasksMutation.mutate(currentProject?.project_id as number, {
+      onSuccess: (data) => {
+        setData(data)
+      },
+    })
+  }, [lastJsonMessage?.message_type])
+
+  useEffect(() => {
+    if (!currentProject?.project_id) {
+      setData([])
+      return
+    }
 
     getTasksMutation.mutate(currentProject?.project_id as number, {
       onSuccess: (data) => {
         setData(data)
       },
     })
-  }, [currentProject?.project_id, lastJsonMessage?.message_type])
+  }, [currentProject?.project_id])
 
   useEffect(() => {
     if (!data) return
@@ -215,7 +227,7 @@ function Home() {
           <Button
             type="primary"
             onClick={handleCreateTask}
-            disabled={currentProject.project_id === 0}
+            disabled={!currentProject.project_id}
           >
             创建任务
           </Button>
