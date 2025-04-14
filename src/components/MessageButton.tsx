@@ -242,7 +242,7 @@ function MessageButton() {
   return (
     <>
       {contextHolder}
-      <Badge count={lastJsonMessage?.unread_count}>
+      <Badge count={lastJsonMessage?.unread_count || unreadMsg.length}>
         <Button
           shape="circle"
           onClick={handleClick}
