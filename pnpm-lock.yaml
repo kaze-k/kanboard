@@ -23,6 +23,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.69.0
         version: 5.69.0(react@18.3.1)
+      '@tauri-apps/api':
+        specifier: ^2.5.0
+        version: 2.5.0
       '@wangeditor/editor':
         specifier: ^5.1.23
         version: 5.1.23
@@ -1087,6 +1090,9 @@ packages:
     resolution: {integrity: sha512-Ift3IUNQqTcaFa1AiIQ7WCb/PPy8aexZdq9pZWLXhfLcLxH0+PZqJ2xFImxCpdDZrFRZhLJrh76geevS5xjRhA==}
     peerDependencies:
       react: ^18 || ^19
+
+  '@tauri-apps/api@2.5.0':
+    resolution: {integrity: sha512-Ldux4ip+HGAcPUmuLT8EIkk6yafl5vK0P0c0byzAKzxJh7vxelVtdPONjfgTm96PbN24yjZNESY8CKo8qniluA==}
 
   '@transloadit/prettier-bytes@0.0.7':
     resolution: {integrity: sha512-VeJbUb0wEKbcwaSlj5n+LscBl9IPgLPkHVGBkh00cztv6X4L/TJXK58LzFuBKX7/GAfiGhIwH67YTLTlzvIzBA==}
@@ -5003,6 +5009,8 @@ snapshots:
     dependencies:
       '@tanstack/query-core': 5.69.0
       react: 18.3.1
+
+  '@tauri-apps/api@2.5.0': {}
 
   '@transloadit/prettier-bytes@0.0.7': {}
 

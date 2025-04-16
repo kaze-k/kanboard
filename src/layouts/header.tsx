@@ -3,12 +3,15 @@ import AccountDropdown from "@/components/AccountDropdown"
 import FullscreenButton from "@/components/FullscreenButton"
 import MessageButton from "@/components/MessageButton"
 import ProjectSwitcher from "@/components/projectSwitcher"
+import { useIsTauri } from "@/hooks"
 import { Layout, Space, theme } from "antd"
 import { NavLink } from "react-router"
 
 const { Header } = Layout
 
 function MainHeader() {
+  const isTauri = useIsTauri()
+
   const {
     token: { colorBgContainer },
   } = theme.useToken()
@@ -52,7 +55,7 @@ function MainHeader() {
       <ProjectSwitcher />
       <div style={{ display: "flex", alignItems: "center" }}>
         <Space>
-          <FullscreenButton />
+          {!isTauri && <FullscreenButton />}
           <MessageButton />
         </Space>
         <div style={{ width: 2, height: 20, margin: "0 10px" }} />

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "kanboard",
+  "version": "0.1.0",
+  "identifier": "org.kaze.kanboard",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5174"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "kanboard",
+        "width": 1320,
+        "height": 700,
+        "minWidth": 1320,
+        "minHeight": 700,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/48x48.ico"
+    ]
+  }
+}
