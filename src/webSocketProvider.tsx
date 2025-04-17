@@ -1,10 +1,11 @@
 import { MsgType } from "#/api"
 import { useMutation } from "@tanstack/react-query"
-import { ReactNode, createContext, useContext, useEffect } from "react"
+import { ReactNode, createContext, useContext, useEffect, useState } from "react"
 import useWebSocket from "react-use-websocket"
 import { WebSocketHook } from "react-use-websocket/dist/lib/types"
 
 import { getUser } from "./api/services/users"
+import { useIsTauri } from "./hooks"
 import { useAction, useUserInfo, useUserToken } from "./stores/userStore"
 
 interface WebSocketProviderProps {
@@ -14,11 +15,32 @@ interface WebSocketProviderProps {
 const WebSocketContext = createContext<WebSocketHook<MsgType> | null>(null)
 
 function WebSocketProvider({ children }: WebSocketProviderProps) {
+  const { isTauri, isReady } = useIsTauri()
   const { id } = useUserInfo()
   const { accessToken } = useUserToken()
-  const socketUrl = `${import.meta.env.VITE_WS_DOMAIN}${import.meta.env.VITE_BASE_URL}/${id}/ws`
+  const [socketUrl, setSocketUrl] = useState<string | null>(null)
 
-  const isConn = id && accessToken ? true : false
+  useEffect(() => {
+    if (!id) return
+
+    const mode = import.meta.env.MODE
+    if (mode !== "tauri") {
+      setSocketUrl(`${import.meta.env.VITE_WS_DOMAIN}${import.meta.env.VITE_BASE_URL}/${id}/ws`)
+      return
+    }
+
+    if (isTauri && isReady && mode === "tauri") {
+      setSocketUrl(`${import.meta.env.VITE_BASE_WS}/${id}/ws`)
+      return
+    } else if (!isTauri && isReady && mode === "tauri") {
+      if (!import.meta.env.VITE_WS_DOMAIN) {
+        setSocketUrl(`${import.meta.env.VITE_BASE_WS}/${id}/ws`)
+        return
+      }
+    }
+  }, [id, isTauri, isReady])
+
+  const isConn = Boolean(isReady && id && accessToken && socketUrl)
 
   const { sendMessage, sendJsonMessage, lastMessage, lastJsonMessage, readyState, getWebSocket } =
     useWebSocket<MsgType>(isConn ? socketUrl : null, {

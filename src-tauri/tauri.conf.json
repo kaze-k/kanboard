@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "identifier": "org.kaze.kanboard",
   "build": {
-    "frontendDist": "../dist",
+    "frontendDist": "../dist-tauri",
     "devUrl": "http://localhost:5174"
   },
   "app": {

@@ -10,7 +10,7 @@ import { NavLink } from "react-router"
 const { Header } = Layout
 
 function MainHeader() {
-  const isTauri = useIsTauri()
+  const { isTauri, isReady } = useIsTauri()
 
   const {
     token: { colorBgContainer },
@@ -55,7 +55,7 @@ function MainHeader() {
       <ProjectSwitcher />
       <div style={{ display: "flex", alignItems: "center" }}>
         <Space>
-          {!isTauri && <FullscreenButton />}
+          {!isTauri && isReady && <FullscreenButton />}
           <MessageButton />
         </Space>
         <div style={{ width: 2, height: 20, margin: "0 10px" }} />
