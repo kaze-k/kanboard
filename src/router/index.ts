@@ -1,6 +1,7 @@
 import { getTaskInfo } from "@/api/services/tasks"
 import Main from "@/layouts"
 import CreateTask from "@/pages/createTask"
+import ErrorPage from "@/pages/errorPage"
 import Home from "@/pages/home"
 import Login from "@/pages/login"
 import Me from "@/pages/me"
@@ -63,6 +64,7 @@ const children = [
 const router = createBrowserRouter([
   {
     path: "/",
+    ErrorBoundary: ErrorPage,
     Component: Main,
     children: children,
     loader: async () => {

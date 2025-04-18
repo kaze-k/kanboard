@@ -180,7 +180,7 @@ const Me: React.FC = () => {
       })
       return (
         <ul>
-          {monthTasks.map((task: any) => (
+          {monthTasks?.map((task: any) => (
             <li key={task.id}>
               <Badge
                 status="success"
@@ -194,7 +194,7 @@ const Me: React.FC = () => {
 
     return (
       <ul>
-        {dayTasks.map((task: any) => (
+        {dayTasks?.map((task: any) => (
           <li key={task.id}>
             <Badge
               status="success"
