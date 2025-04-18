@@ -232,7 +232,7 @@ const Project: React.FC = () => {
               <Select
                 showSearch
                 optionFilterProp="label"
-                placeholder="选择负责人"
+                placeholder="选择成员"
                 style={{ width: 200 }}
                 mode="multiple"
                 onClick={() => {
